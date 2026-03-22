@@ -3,6 +3,14 @@ Global Energy Transition: SQL & Tableau Insights
 Project Overview
 This project analyzes global electricity generation trends (2017–2023) to evaluate the shift from fossil fuels to renewable energy. By combining SQL data transformation with Tableau visualization, I’ve identified key market leaders, technology efficiency gaps, and geographic investment risks.
 
+Business & Strategic Questions
+
+-Which region is leading the transition? 
+-What is the "Capacity vs. Generation" efficiency?
+-Which technology has the highest Compound Annual Growth Rate (CAGR)? 
+-Are fossil fuels being phased out or just supplemented? 
+-Which specific countries are "outperformers" in their region? 
+
 Key Business Insights
 -Market share analysis reveals a "two-speed" global transition. While Northern Europe and Brazil lead in green capacity, Asia remains heavily reliant on fossil fuels, highlighting a massive opportunity for future infrastructure investment.
 - Solar energy shows the highest growth rate but the lowest efficiency ratio, while Bioenergy remains a critical "baseload" partner due to its high reliability.
