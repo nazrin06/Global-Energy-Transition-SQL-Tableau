@@ -33,4 +33,4 @@ Growth vs. Efficiency Scatter Plot: A portfolio strategy tool to categorize "Hig
 
 How to Use
 SQL Queries: Found in the /scripts folder. These can be run on any standard SQL environment.
-Tableau Dashboard: [Link to your Tableau Public profile or Workbook file].
+Tableau Dashboard: [[Link to your Tableau Public profile or Workbook file].](https://github.com/nazrin06/Global-Energy-Transition-SQL-Tableau/blob/6b117536b0719690315885048ca9e2258ae8b3c6/tableau/Tableau_Dashboard.png)
