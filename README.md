@@ -32,6 +32,7 @@ Growth vs. Efficiency Scatter Plot: A portfolio strategy tool to categorize "Hig
 
 
 How to Use
+
 SQL Queries: Found here:https://github.com/nazrin06/Global-Energy-Transition-SQL-Tableau/blob/d51895b17b530eba5902a401da539708afcd34ce/sql_queries/Scripts%20and%20comments. 
 These can be run on any standard SQL environment.
 
