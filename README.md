@@ -6,9 +6,13 @@ This project analyzes global electricity generation trends (2017–2023) to eval
 Business & Strategic Questions
 
 -Which region is leading the transition? 
+
 -What is the "Capacity vs. Generation" efficiency?
+
 -Which technology has the highest Compound Annual Growth Rate (CAGR)? 
+
 -Are fossil fuels being phased out or just supplemented? 
+
 -Which specific countries are "outperformers" in their region? 
 
 Key Business Insights
