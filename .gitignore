@@ -1,0 +1,28 @@
+# --- Data Files ---
+# Ignore large raw datasets (GitHub limit is 100MB)
+*.csv
+*.xlsx
+*.json
+*.sqlite
+# Exceptions: if you have a tiny metadata file you WANT to keep
+# !data/metadata.csv
+
+# --- Tableau Files ---
+# Ignore local recovery and log files
+*.twb.bak
+*.tfl.bak
+Logs/
+Shapes/
+Data/
+
+# --- System & IDE Files ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Python (if you used it for cleaning) ---
+__pycache__/
+*.py[cod]
+.venv/
+env/
