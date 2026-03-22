@@ -1,0 +1,94 @@
+SELECT *
+FROM `data`.`electricity_generation`;
+/* Market Share Analysis
+This query calculates the percentage of total electricity generation that comes from 
+renewables versus fossil fuels for the most recent year.*/
+SELECT 
+    Country,
+    SUM(CASE WHEN ENERGY_SOURCE IN ('Wind energy','Solar energy','Bioenergy','Hydropower (excl. Pumped Storage)') THEN COALESCE('2023', 0) ELSE 0 END) / NULLIF(SUM(COALESCE('2023', 0)), 0) * 100 AS Renewable_Share_Pct,
+    SUM(CASE WHEN TRIM(ENERGY_SOURCE) = 'Fossil fuels' THEN COALESCE('2023', 0) ELSE 0 END) / NULLIF(SUM(COALESCE('2023', 0)), 0) * 100 AS Fossil_Share_Pct
+FROM `data`.`electricity_generation`
+WHERE TRIM(`INDICATOR.ID`) = 'EG_GWH'
+GROUP BY Country
+ORDER BY Renewable_Share_Pct DESC;
+
+/*Year-over-Year Growth Rate
+This identifies which technology is scaling the fastest
+ by comparing the start and end of the dataset period.*/
+
+SELECT 
+    ENERGY_SOURCE,
+    ROUND(SUM(CASE WHEN `2017` > 0 THEN `2017` ELSE 0 END)) AS Capacity_2017,
+    ROUND(SUM(CASE WHEN `2023` > 0 THEN `2023` ELSE 0 END)) AS Capacity_2023,
+    ROUND(((SUM(`2023`) - SUM(`2017`)) / NULLIF(SUM(`2017`), 0)) * 100) AS Growth_Rate_Pct
+FROM `data`.`electricity_generation`
+WHERE `INDICATOR.ID` = 'EIC_MW'
+GROUP BY ENERGY_SOURCE
+ORDER BY Growth_Rate_Pct DESC;
+
+
+/* Capacity Factor (Efficiency).This query compares 
+Installed Capacity (potential) to Generation (actual) to see which technologies are most reliable.*/
+
+
+SELECT 
+    ENERGY_SOURCE,
+    ROUND(SUM(CASE WHEN `INDICATOR.ID` = 'EG_GWH' THEN COALESCE(`2022`, 0) ELSE 0 END)) AS Total_Gen_2022,
+
+    ROUND(SUM(CASE WHEN `INDICATOR.ID` = 'EIC_MW' THEN COALESCE(`2022`, 0) ELSE 0 END)) AS Total_Cap_2022,
+
+    ROUND(
+        SUM(CASE WHEN `INDICATOR.ID` = 'EG_GWH' THEN COALESCE(`2022`, 0) ELSE 0 END) / 
+        NULLIF(SUM(CASE WHEN `INDICATOR.ID` = 'EIC_MW' THEN COALESCE(`2022`, 0) ELSE 0 END), 0), 
+    2) AS Efficiency_Ratio
+FROM `data`.`electricity_generation`
+GROUP BY ENERGY_SOURCE  
+HAVING Total_Cap_2022 > 0 AND Total_Gen_2022 > 0
+ORDER BY Efficiency_Ratio DESC;
+
+#Repeating the same quesry for the year 2017 (start year) to see how the ratio has improved over time
+
+SELECT 
+    ENERGY_SOURCE,
+    ROUND(SUM(CASE WHEN `INDICATOR.ID` = 'EG_GWH' THEN COALESCE(`2017`, 0) ELSE 0 END)) AS Total_Gen_2017,
+
+    ROUND(SUM(CASE WHEN `INDICATOR.ID` = 'EIC_MW' THEN COALESCE(`2017`, 0) ELSE 0 END)) AS Total_Cap_2017,
+
+    ROUND(
+        SUM(CASE WHEN `INDICATOR.ID` = 'EG_GWH' THEN COALESCE(`2017`, 0) ELSE 0 END) / 
+        NULLIF(SUM(CASE WHEN `INDICATOR.ID` = 'EIC_MW' THEN COALESCE(`2017`, 0) ELSE 0 END), 0), 
+    2) AS Efficiency_Ratio
+FROM `data`.`electricity_generation`
+GROUP BY ENERGY_SOURCE  
+HAVING Total_Cap_2017 > 0 AND Total_Gen_2017 > 0
+ORDER BY Efficiency_Ratio DESC;
+
+
+ #Fossil Fuel Phase-Out Tracker
+#This highlights countries where fossil fuel generation is actually decreasing year-over-year.
+
+SELECT 
+    Country,
+    ROUND(`2021`) AS Gen_2021,
+    ROUND(`2022`) AS Gen_2022,
+    ROUND((`2022` - `2021`)) AS Absolute_Change
+FROM `data`.`electricity_generation`
+WHERE ENERGY_SOURCE = 'Fossil fuels' 
+  AND `INDICATOR.ID` = 'EG_GWH'
+  AND `2022` < `2021`
+ORDER BY Absolute_Change ASC;
+
+
+#Top 5 Renewable Leaders by Region
+#This identifies the top 5 countries with the highest renewable capacity
+
+SELECT COUNTRY,
+ROUND(SUM(CASE WHEN `INDICATOR.ID` = 'EIC_MW' AND ENERGY_SOURCE != 'Fossil fuels'  THEN COALESCE(`2023`, 0) ELSE 0 END)) AS Total_Cap_2023
+FROM `data`.`electricity_generation`
+GROUP BY COUNTRY
+ORDER BY Total_Cap_2023 DESC
+LIMIT 5
+
+SELECT 2021, `INDICATOR.ID`
+FROM `data`.`electricity_generation`
+WHERE  `INDICATOR.ID`= 'EG_GWH'
